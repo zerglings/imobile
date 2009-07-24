@@ -2,22 +2,22 @@
 
 Gem::Specification.new do |s|
   s.name = %q{imobile}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Victor Costan"]
-  s.date = %q{2009-07-23}
+  s.date = %q{2009-07-24}
   s.description = %q{Library for servers backing iPhone applications.}
   s.email = %q{victor@zergling.net}
-  s.extra_rdoc_files = ["CHANGELOG", "lib/imobile/validate_receipt.rb", "lib/imobile.rb", "LICENSE", "README"]
-  s.files = ["CHANGELOG", "lib/imobile/validate_receipt.rb", "lib/imobile.rb", "LICENSE", "Manifest", "Rakefile", "README", "test/validate_receipt_test.rb", "testdata/forged_sandbox_receipt", "testdata/valid_sandbox_receipt", "imobile.gemspec"]
+  s.extra_rdoc_files = ["CHANGELOG", "lib/imobile/crypto_app_fprint.rb", "lib/imobile/validate_receipt.rb", "lib/imobile.rb", "LICENSE", "README"]
+  s.files = ["CHANGELOG", "imobile.gemspec", "lib/imobile/crypto_app_fprint.rb", "lib/imobile/validate_receipt.rb", "lib/imobile.rb", "LICENSE", "Manifest", "Rakefile", "README", "test/crypto_app_fprint_test.rb", "test/validate_receipt_test.rb", "testdata/device_attributes.yml", "testdata/forged_sandbox_receipt", "testdata/valid_sandbox_receipt"]
   s.homepage = %q{http://github.com/costan/imobile}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Imobile", "--main", "README"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{zerglings}
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{Library for servers backing iPhone applications.}
-  s.test_files = ["test/validate_receipt_test.rb"]
+  s.test_files = ["test/crypto_app_fprint_test.rb", "test/validate_receipt_test.rb"]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

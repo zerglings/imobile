@@ -10,8 +10,7 @@ require 'test/unit'
 
 class ValidateReceiptTest < Test::Unit::TestCase
   def setup
-    testdata_path = File.join(File.dirname(__FILE__), '..', 'testdata')
-    
+    testdata_path = File.join(File.dirname(__FILE__), '..', 'testdata')    
     @forged_sandbox_blob = File.read File.join(testdata_path,
                                                'forged_sandbox_receipt')
     @valid_sandbox_blob = File.read File.join(testdata_path,
@@ -47,4 +46,7 @@ class ValidateReceiptTest < Test::Unit::TestCase
                  Imobile.validate_receipt(@forged_sandbox_blob, :sandbox),
                  "Forged receipt passed validation"
   end
+  
+  # TODO(costan): add tests against the real servers, as soon as someone donates
+  #               a receipt
 end
