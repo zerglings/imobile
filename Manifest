@@ -1,0 +1,10 @@
+CHANGELOG
+lib/imobile/validate_receipt.rb
+lib/imobile.rb
+LICENSE
+Manifest
+Rakefile
+README
+test/validate_receipt_test.rb
+testdata/forged_sandbox_receipt
+testdata/valid_sandbox_receipt
