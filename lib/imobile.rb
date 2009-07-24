@@ -5,4 +5,5 @@
 # License:: MIT
 
 require 'imobile/crypto_app_fprint.rb'
+require 'imobile/push_notification.rb'
 require 'imobile/validate_receipt.rb'

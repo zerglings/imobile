@@ -99,6 +99,6 @@ module AppStoreReceiptValidation
     
     process_response issue_request(request(receipt_blob, uri), uri)     
   end
-end
+end  # module AppStoreReceiptValidation
 
 end  # namespace Imobile

@@ -115,6 +115,6 @@ module CryptoSupportAppFprint
     manifest_data = File.read binary_path
     app_fprint_from_raw_data device_attributes, manifest_data
   end    
-end
+end  # module CryptoSupportAppFprint
 
 end  # namespace Imobile

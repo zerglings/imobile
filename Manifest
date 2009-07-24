@@ -1,6 +1,6 @@
 CHANGELOG
-imobile.gemspec
 lib/imobile/crypto_app_fprint.rb
+lib/imobile/push_notification.rb
 lib/imobile/validate_receipt.rb
 lib/imobile.rb
 LICENSE
@@ -8,7 +8,10 @@ Manifest
 Rakefile
 README
 test/crypto_app_fprint_test.rb
+test/push_notification_test.rb
 test/validate_receipt_test.rb
+testdata/apns_developer.p12
+testdata/apns_production.p12
 testdata/device_attributes.yml
 testdata/forged_sandbox_receipt
 testdata/valid_sandbox_receipt
