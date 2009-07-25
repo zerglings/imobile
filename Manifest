@@ -13,5 +13,8 @@ test/validate_receipt_test.rb
 testdata/apns_developer.p12
 testdata/apns_production.p12
 testdata/device_attributes.yml
+testdata/encoded_notification
 testdata/forged_sandbox_receipt
+testdata/sandbox_device_token
+testdata/sandbox_device_token.bin
 testdata/valid_sandbox_receipt
