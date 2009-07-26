@@ -1,6 +1,7 @@
 --- 
 app_id: us.costan.ZergSupportTests
 app_provisioning: s
+app_push_token: c04046356452c0bce8e090c0cd15cfd9b7a7365f47fb33ab8e784fd7be3ea717
 app_version: "1.9.8.3"
 hardware_model: i386
 os_name: iPhone OS

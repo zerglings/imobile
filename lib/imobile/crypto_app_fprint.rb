@@ -66,8 +66,8 @@ module CryptoSupportAppFprint
 
   # The device attributes included in the finger-printing operation.  
   def self.device_fprint_attributes
-    Set.new(['app_id', 'app_version', 'app_provisioning', 'hardware_model',
-             'os_name', 'os_version', 'unique_id'])
+    Set.new(['app_id', 'app_version', 'app_provisioning', 'app_push_token',
+             'hardware_model', 'os_name', 'os_version', 'unique_id'])
   end
   
   # The finger-print for a data blob, as implemented in CryptoSupport.

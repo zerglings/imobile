@@ -24,7 +24,7 @@ class CryptoAppFprintTest < Test::Unit::TestCase
   
   def test_device_fprint
     fprint = Imobile::CryptoSupportAppFprint.hex_device_fprint @device_attrs
-    assert_equal '9cef1c830742fa83ad213281c1ce47b5', fprint
+    assert_equal '3231b35f8466d60a6ae00122d2530e65', fprint
   end
   
   def test_crypto_app_fprint
@@ -33,7 +33,7 @@ class CryptoAppFprintTest < Test::Unit::TestCase
                    and_return(@mock_binary)
     fprint = Imobile.crypto_app_fprint @device_attrs, mock_binary_path
     gold_fprint =
-        'b5b45dec2177d095bff66dd895c624b1bc264e48575f2b39ed5456c3821c338f' 
+        'd84630797d0b19d7d8403705bcc154cfbd82ff386587875193f7d99f01348014' 
     assert_equal gold_fprint, fprint
   end
 end
