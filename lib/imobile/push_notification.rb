@@ -96,21 +96,73 @@ module PushNotifications
   end
   
   # Decodes an APNs certificate.
-  def self.decode_push_certificate(certificate_blob)    
+  def self.decode_push_certificate(certificate_blob)
+    if use_new_certificate_decoder?
+      # Ruby 1.8.7 and above.
+      data = decode_push_certificate_new certificate_blob
+    else
+      # Ruby 1.8.6.
+      data = decode_push_certificate_heroku certificate_blob
+    end
+    data[:server_type] = server_type data[:certificate] 
+    data
+  end
+  
+  # Checks whether the new certificate decoding code is supported.
+  def self.use_new_certificate_decoder?
+    OpenSSL::PKCS12.respond_to? :new    
+  end
+  
+  # Decodes an APNs certificate, using the new (1.8.7+) OpenSSL methods.
+  def self.decode_push_certificate_new(certificate_blob)    
     pkcs12 = OpenSSL::PKCS12.new certificate_blob
     
     certificate = pkcs12.certificate
     key = pkcs12.key
-    case certificate.subject.to_s
-    when /Apple Development Push/
-      server_type = :sandbox
-    when /Apple Production Push/
-      server_type = :production
+    
+    { :certificate => certificate, :key => key }
+  end
+  
+  # Decodes an APNs certificate, using the openssl command-line tool.
+  #
+  # This works on Heroku, which uses Ruby 1.8.6.
+  def self.decode_push_certificate_heroku(certificate_blob)
+    # Most of the filesystem on Heroku is read-only. On the other hand, not
+    # everyone runs on Heroku. Find a reasonable temporary dir.
+    if defined? RAILS_ROOT
+      temp_dir = File.join RAILS_ROOT, 'tmp'
+    elsif File.exists? '/tmp'
+      temp_dir = '/tmp'
     else
-      raise "Invalid push certificate - #{certificate.inspect}"
+      temp_dir = '.'
     end
     
-    { :certificate => certificate, :key => key, :server_type => server_type }
+    pkcs12_file_name = File.join temp_dir, "apns_#{Process.pid}.p12"
+    pem_file_name = File.join temp_dir, "apns_#{Process.pid}.pem"
+    out_file_name = File.join temp_dir, "apns_#{Process.pid}.err"
+    
+    # Use the command-line openssl tool to break up the pkcs12 file.
+    File.open(pkcs12_file_name, 'wb') { |f| f.write certificate_blob }
+    Kernel.system "openssl pkcs12 -in #{pkcs12_file_name} -clcerts -nodes " +
+                  "-out #{pem_file_name} -password pass: 2> #{out_file_name}"
+    pem_blob = File.read pem_file_name    
+    [pkcs12_file_name, pem_file_name, out_file_name].each { |f| File.delete f }
+    
+    certificate = OpenSSL::X509::Certificate.new pem_blob
+    key = OpenSSL::PKey::RSA.new pem_blob
+    { :certificate => certificate, :key => key }    
+  end
+  
+  # The Apple Push Notification server type that a certificate works with.
+  def self.server_type(certificate)
+    case certificate.subject.to_s
+    when /Apple Development Push/
+      return :sandbox
+    when /Apple Production Push/
+      return :production
+    else
+      raise "Invalid push certificate - #{certificate.inspect}"
+    end        
   end
   
   # Encodes a push notification in a binary string for APNs consumption.

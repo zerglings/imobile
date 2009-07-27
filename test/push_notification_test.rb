@@ -13,6 +13,8 @@ require 'flexmock/test_unit'
 
 class PushNotificationTest < Test::Unit::TestCase
   def setup
+    super
+    
     testdata_path = File.join(File.dirname(__FILE__), '..', 'testdata')
     @dev_cert_path = File.join(testdata_path, 'apns_developer.p12') 
     @prod_cert_path = File.join(testdata_path, 'apns_production.p12')
@@ -44,6 +46,13 @@ class PushNotificationTest < Test::Unit::TestCase
            "Prod certificate does not contain a key"
     assert(/Q686F7Z6YU/ =~ cert_data[:certificate].subject.to_s,
            "Wrong data in prod certificate #{cert_data[:certificate].inspect}")
+  end
+  
+  def test_read_push_certificate_on_heroku
+    flexmock(Imobile::PushNotifications).
+        should_receive(:use_new_certificate_decoder?).and_return(false)
+        
+    test_read_push_certificate
   end
   
   def test_pack_push_token

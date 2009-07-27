@@ -1,3 +1,5 @@
+v0.0.6. New push certificates read method for Ruby 1.8.6 on Heroku.
+
 v0.0.5. Renamed device_token to push_token throughout the API.
 
 v0.0.4. Updated CryptoSupport with the push token device attribute.  

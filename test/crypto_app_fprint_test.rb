@@ -13,6 +13,8 @@ require 'flexmock/test_unit'
 
 class CryptoAppFprintTest < Test::Unit::TestCase
   def setup
+    super
+    
     testdata_path = File.join(File.dirname(__FILE__), '..', 'testdata')
     @device_attrs = File.open(File.join(testdata_path,
                                         'device_attributes.yml')) do |f| 

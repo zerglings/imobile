@@ -10,6 +10,8 @@ require 'test/unit'
 
 class ValidateReceiptTest < Test::Unit::TestCase
   def setup
+    super
+    
     testdata_path = File.join(File.dirname(__FILE__), '..', 'testdata')    
     @forged_sandbox_blob = File.read File.join(testdata_path,
                                                'forged_sandbox_receipt')
