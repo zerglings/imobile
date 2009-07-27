@@ -21,7 +21,7 @@ module Imobile
 #
 # Args:
 #   notification:: ruby Hash indicating the desired notification; the hash
-#                  should have an extra key named :device_token, containing
+#                  should have an extra key named :push_token, containing
 #                  the binary-encoded (not hexadecimally-encoded) iMobile device
 #                  token, as provided by the UIApplicationDelegate method
 #                  application:didRegisterForRemoteNotificationsWithDeviceToken: 
@@ -55,7 +55,7 @@ end
 #
 # The currently provided feedback is the tokens for the devices which rejected
 # notifications. Each piece of feedback is a hash with the following keys:
-#   :device_token:: the device's token, in binary (not hexadecimal) format
+#   :push_token:: the device's token, in binary (not hexadecimal) format
 #   :time:: the last time when the device rejected notifications; according to
 #           Apple, the rejection can be discarded if the device sent a
 #           token after this time
@@ -76,9 +76,9 @@ def self.valid_notification?(notification)
   PushNotifications.encode_notification(notification) ? true : false
 end
 
-# Packs a hexadecimal iMobile device token into binary form.
-def self.pack_hex_device_token(device_token)
-  [device_token.gsub(/\s/, '')].pack('H*')
+# Packs a hexadecimal iMobile token for push notifications into binary form.
+def self.pack_hex_push_token(push_token)
+  [push_token.gsub(/\s/, '')].pack('H*')
 end
 
 # Implementation details for push_notification.
@@ -118,13 +118,13 @@ module PushNotifications
   # Returns a string suitable for transmission over an APNs, or nil if the
   # notification is invalid (i.e. the json encoding exceeds 256 bytes).
   def self.encode_notification(notification)
-    device_token = notification[:device_token] || ''
+    push_token = notification[:push_token] || ''
     notification = notification.dup
-    notification.delete :device_token
+    notification.delete :push_token
     json_notification = notification.to_json
     return nil if json_notification.length > 256
     
-    ["\0", [device_token.length].pack('n'), device_token,
+    ["\0", [push_token.length].pack('n'), push_token,
      [json_notification.length].pack('n'), json_notification].join
   end
     
@@ -226,7 +226,8 @@ module PushNotifications
   #
   # The currently provided feedback is the tokens for the devices which rejected
   # notifications. Each piece of feedback is a hash with the following keys:
-  #   :device_token:: the device's token, in binary (not hexadecimal) format
+  #   :push_token:: the device's token for push notifications, in binary
+  #                 (not hexadecimal) format
   #   :time:: the last time when the device rejected notifications; according to
   #           Apple, the rejection can be discarded if the device sent a
   #           token after this time
@@ -238,9 +239,9 @@ module PushNotifications
     loop do      
       break unless header = fixed_socket_read(socket, 6)
       time = Time.at header[0, 4].unpack('N').first
-      device_token = fixed_socket_read(socket, header[4, 2].unpack('n').first)
-      break unless device_token
-      feedback_item = { :device_token => device_token, :time => time }
+      push_token = fixed_socket_read(socket, header[4, 2].unpack('n').first)
+      break unless push_token
+      feedback_item = { :push_token => push_token, :time => time }
       yield feedback_item
     end
     socket.close

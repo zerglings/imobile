@@ -1,3 +1,5 @@
+v0.0.5. Renamed device_token to push_token throughout the API.
+
 v0.0.4. Updated CryptoSupport with the push token device attribute.  
 
 v0.0.3. Push Notification support.

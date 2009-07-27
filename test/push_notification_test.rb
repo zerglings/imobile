@@ -17,8 +17,8 @@ class PushNotificationTest < Test::Unit::TestCase
     @dev_cert_path = File.join(testdata_path, 'apns_developer.p12') 
     @prod_cert_path = File.join(testdata_path, 'apns_production.p12')
     
-    @hex_dev_token = File.read File.join(testdata_path, 'sandbox_device_token')
-    @dev_token = File.read File.join(testdata_path, 'sandbox_device_token.bin')
+    @hex_dev_token = File.read File.join(testdata_path, 'sandbox_push_token')
+    @dev_token = File.read File.join(testdata_path, 'sandbox_push_token.bin')
     
     @notification = {:aps => {:alert => 'imobile test notification'}}
     @encoded_notification = File.read File.join(testdata_path,
@@ -46,12 +46,12 @@ class PushNotificationTest < Test::Unit::TestCase
            "Wrong data in prod certificate #{cert_data[:certificate].inspect}")
   end
   
-  def test_pack_device_token
-    assert_equal @dev_token, Imobile.pack_hex_device_token(@hex_dev_token)
+  def test_pack_push_token
+    assert_equal @dev_token, Imobile.pack_hex_push_token(@hex_dev_token)
   end
    
   def test_encode_notification
-    notification = @notification.merge :device_token => @dev_token
+    notification = @notification.merge :push_token => @dev_token
     encoded = Imobile::PushNotifications.encode_notification notification
     
     assert_equal @encoded_notification, encoded
@@ -60,7 +60,7 @@ class PushNotificationTest < Test::Unit::TestCase
   def test_valid_notification
     assert Imobile.valid_notification?(@notification),
            'Failed on easy valid notification'
-    notification = @notification.merge :device_token => '1' * 512
+    notification = @notification.merge :push_token => '1' * 512
     assert Imobile.valid_notification?(notification),
            'Failed on notification with large device token'
     notification[:aps][:alert] = '1' * 512
@@ -85,7 +85,7 @@ class PushNotificationTest < Test::Unit::TestCase
   end
     
   def test_smoke_push
-    notification = @notification.merge :device_token => @dev_token
+    notification = @notification.merge :push_token => @dev_token
     Imobile.push_notification notification, @dev_cert_path
   end
   
@@ -95,8 +95,8 @@ class PushNotificationTest < Test::Unit::TestCase
     token1 = @dev_token
     token2 = @dev_token.reverse
     golden_feedback = [
-      {:device_token => token1, :time => time1},
-      {:device_token => token2, :time => time2}
+      {:push_token => token1, :time => time1},
+      {:push_token => token2, :time => time2}
     ]
     
     reads = [
@@ -143,8 +143,8 @@ class PushNotificationTest < Test::Unit::TestCase
   
   # Verifies that a piece of feedback looks valid.
   def check_feedback_item(feedback)
-    assert feedback[:device_token],
-           "A feedback item does not contain a device token"
+    assert feedback[:push_token],
+           "A feedback item does not contain a push token"
     assert feedback[:time],
            "A feedback item does not contain a timestamp"
   end  

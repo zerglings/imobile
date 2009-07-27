@@ -1,4 +1,5 @@
 CHANGELOG
+imobile.gemspec
 lib/imobile/crypto_app_fprint.rb
 lib/imobile/push_notification.rb
 lib/imobile/validate_receipt.rb
@@ -15,6 +16,6 @@ testdata/apns_production.p12
 testdata/device_attributes.yml
 testdata/encoded_notification
 testdata/forged_sandbox_receipt
-testdata/sandbox_device_token
-testdata/sandbox_device_token.bin
+testdata/sandbox_push_token
+testdata/sandbox_push_token.bin
 testdata/valid_sandbox_receipt
