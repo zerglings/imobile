@@ -2,17 +2,17 @@
 
 Gem::Specification.new do |s|
   s.name = %q{imobile}
-  s.version = "0.0.6"
+  s.version = "0.0.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Victor Costan"]
-  s.date = %q{2009-07-27}
+  s.date = %q{2009-07-28}
   s.description = %q{Library for servers backing iPhone applications.}
   s.email = %q{victor@zergling.net}
-  s.extra_rdoc_files = ["CHANGELOG", "lib/imobile/crypto_app_fprint.rb", "lib/imobile/push_notification.rb", "lib/imobile/validate_receipt.rb", "lib/imobile.rb", "LICENSE", "README"]
-  s.files = ["CHANGELOG", "imobile.gemspec", "lib/imobile/crypto_app_fprint.rb", "lib/imobile/push_notification.rb", "lib/imobile/validate_receipt.rb", "lib/imobile.rb", "LICENSE", "Manifest", "Rakefile", "README", "test/crypto_app_fprint_test.rb", "test/push_notification_test.rb", "test/validate_receipt_test.rb", "testdata/apns_developer.p12", "testdata/apns_production.p12", "testdata/device_attributes.yml", "testdata/encoded_notification", "testdata/forged_sandbox_receipt", "testdata/sandbox_push_token", "testdata/sandbox_push_token.bin", "testdata/valid_sandbox_receipt"]
+  s.extra_rdoc_files = ["CHANGELOG", "lib/imobile/crypto_app_fprint.rb", "lib/imobile/push_notification.rb", "lib/imobile/validate_receipt.rb", "lib/imobile.rb", "LICENSE", "README.textile"]
+  s.files = ["CHANGELOG", "imobile.gemspec", "lib/imobile/crypto_app_fprint.rb", "lib/imobile/push_notification.rb", "lib/imobile/validate_receipt.rb", "lib/imobile.rb", "LICENSE", "Manifest", "Rakefile", "README.textile", "test/crypto_app_fprint_test.rb", "test/push_notification_test.rb", "test/validate_receipt_test.rb", "testdata/apns_developer.p12", "testdata/apns_production.p12", "testdata/device_attributes.yml", "testdata/encoded_notification", "testdata/forged_sandbox_receipt", "testdata/sandbox_push_token", "testdata/sandbox_push_token.bin", "testdata/valid_sandbox_receipt"]
   s.homepage = %q{http://github.com/costan/imobile}
-  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Imobile", "--main", "README"]
+  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Imobile", "--main", "README.textile"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{zerglings}
   s.rubygems_version = %q{1.3.5}

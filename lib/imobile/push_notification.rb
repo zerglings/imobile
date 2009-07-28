@@ -51,7 +51,7 @@ end
 # Reads the available feedback from Apple's Push Notification service.
 #
 # Args:
-#   certificate_or_path:: see Imobile.push_notification
+#   path_or_certificate:: see Imobile.push_notification
 #
 # The currently provided feedback is the tokens for the devices which rejected
 # notifications. Each piece of feedback is a hash with the following keys:
@@ -79,6 +79,53 @@ end
 # Packs a hexadecimal iMobile token for push notifications into binary form.
 def self.pack_hex_push_token(push_token)
   [push_token.gsub(/\s/, '')].pack('H*')
+end
+
+# Carries state for delivering batched notifications.
+class PushNotificationsContext
+  # Sends a notification via this context's APNs connection.
+  #
+  # Args:
+  #   notification:: see Imobile.push_notification
+  #
+  # Raises a RuntimeError if the context's APNs connection was closed.
+  def push(notification)
+    raise "The context's APNs connection was closed" if @closed
+    @socket.write PushNotifications.encode_notification(notification)
+  end
+  
+  # Creates a push context for a fixed Apple Push Notifications server.
+  #
+  # Args:
+  #   path_or_certificate:: see Imobile.push_notification
+  def initialize(path_or_certificate)
+    @certificate = PushNotifications.read_certificate path_or_certificate    
+    @socket = PushNotifications.apns_socket @certificate, :push
+    @closed = false
+  end
+  
+  # Closes the APNs connection. The context is unusable afterwards.
+  def close
+    @socket.close unless @closed
+    @closed = true
+  end
+  
+  # The raw SSL connection to the APNs. 
+  attr_reader :socket
+  # The APNs client certificate.
+  attr_reader :certificate
+
+  # True if the context's APNs connection is closed.
+  def closed?
+    @closed
+  end
+  
+  # Called when the context is garbage-collected.
+  #
+  # Closes the APNs connection, if it wasn't already closed.
+  def finalize
+    close unless @closed
+  end
 end
 
 # Implementation details for push_notification.
@@ -203,7 +250,6 @@ module PushNotifications
       super
       raw_socket.close
     end
-    socket.sync = true
     socket.connect
   end
   
@@ -239,17 +285,17 @@ module PushNotifications
   
   # Real implementation of Imobile.push_notifications
   def self.push_notifications(certificate_or_path, notifications)
-    socket = apns_socket read_certificate(certificate_or_path), :push
+    context = PushNotificationsContext.new certificate_or_path
     notifications = [notifications] if notifications.kind_of? Hash
-    notifications.each { |n| socket.write encode_notification(n) }
+    notifications.each { |notification| context.push notification }
     if Kernel.block_given?
       loop do
         notifications = yield
         notifications = [notifications] if notifications.kind_of? Hash
-        notifications.each { |n| socket.write encode_notification(n) }
+        notifications.each { |notification| context.push notification }
       end
     end
-    socket.close
+    context.close
   end
   
   # Real implementation of Imobile.push_notification
