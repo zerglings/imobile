@@ -104,9 +104,21 @@ class PushNotificationsContext
     @closed = false
   end
   
+  # Forces a flush of all the buffered data across the APNs connection.
+  #
+  # This should be called at the end of a batch of notifications. If flush is
+  # not called, notifications may be stalled indefinitely.
+  def flush
+    raise "The context's APNs connection was closed" if @closed
+    @socket.flush
+  end
+  
   # Closes the APNs connection. The context is unusable afterwards.
   def close
-    @socket.close unless @closed
+    unless @closed
+      @socket.flush
+      @socket.close
+    end      
     @closed = true
   end
   
@@ -295,6 +307,7 @@ module PushNotifications
         notifications.each { |notification| context.push notification }
       end
     end
+    context.flush
     context.close
   end
   

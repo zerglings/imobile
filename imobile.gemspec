@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{imobile}
-  s.version = "0.0.7"
+  s.version = "0.0.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Victor Costan"]
-  s.date = %q{2009-07-28}
+  s.date = %q{2009-07-29}
   s.description = %q{Library for servers backing iPhone applications.}
   s.email = %q{victor@zergling.net}
   s.extra_rdoc_files = ["CHANGELOG", "lib/imobile/crypto_app_fprint.rb", "lib/imobile/push_notification.rb", "lib/imobile/validate_receipt.rb", "lib/imobile.rb", "LICENSE", "README.textile"]
