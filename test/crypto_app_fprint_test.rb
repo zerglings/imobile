@@ -29,6 +29,22 @@ class CryptoAppFprintTest < Test::Unit::TestCase
     assert_equal '3231b35f8466d60a6ae00122d2530e65', fprint
   end
   
+  class MockTempfile
+    def initialize(string)
+      @string = string
+    end
+    def read
+      @string
+    end
+  end
+  
+  def test_device_fprint_from_tempfile
+    attrs = {} 
+    @device_attrs.each { |k, v| attrs[k] = MockTempfile.new v }
+    fprint = Imobile::CryptoSupportAppFprint.hex_device_fprint @device_attrs
+    assert_equal '3231b35f8466d60a6ae00122d2530e65', fprint
+  end
+
   def test_crypto_app_fprint
     mock_binary_path = '/binary/path'
     flexmock(File).should_receive(:read).with(mock_binary_path).

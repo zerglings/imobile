@@ -61,7 +61,8 @@ module CryptoSupportAppFprint
   def self.device_fprint_data(device_attributes)
     attrs = device_fprint_attributes
     keys = device_attributes.keys.select { |k| attrs.include? k.to_s }
-    'D|' + keys.sort.map { |k| device_attributes[k] }.join('|')    
+        'D|' + keys.sort.map { |k| device_attributes[k] }.
+        map { |v| v.respond_to?(:read) ? v.read : v }.join('|')
   end
 
   # The device attributes included in the finger-printing operation.  
